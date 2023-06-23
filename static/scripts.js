@@ -6,11 +6,10 @@ var isDrawing = false;
 // Function to handle user mouse down event
 function handleMouseDown(event) {
   // only start drawing once user has uploaded an image
-  if (img) { 
+  if (!img) return; 
       startX = event.offsetX;
       startY = event.offsetY;
       isDrawing = true;
-  }
 }
 
 // Function to handle user mouse move event
@@ -44,6 +43,49 @@ function drawRectangle() {
   ctx.stroke();
 }
 
+// Function to handle when user clicks Extract Text button
+function handleExtractText() {
+  // Check rectangle is good
+
+  // Extract the selected region of interest
+  var roiData = {
+    startX: startX,
+    startY: startY,
+    endX: endX,
+    endY: endY,
+    imageData: getImageDataInROI(startX, startY, endX, endY)
+  };
+
+   // Make an AJAX request to the Flask route and send the ROI data 
+  $.ajax({
+    url: '/extract_text',
+    type: 'POST',
+    data: JSON.stringify(roiData),
+    contentType: 'application/json',
+    success: function(response) {
+      // Server will respond with the extracted text within the ROI - display this on the page
+      var extractedText = JSON.parse(response).extracted_text;
+      $("#extractedText").text(extractedText);
+    },
+    error: function(xhr, status, error) {
+      // Handle the error
+      console.error(error);
+    }
+  });
+}
+
+// Function to retrieve image data within user-selected ROI
+function getImageDataInROI(startX, startY, endX, endY) {
+  // Get the pixels within the specified region of interest
+  var imageData = ctx.getImageData(startX, startY, endX - startX, endY - startY);
+  
+  // Convert the pixel data to a Uint8Array
+  var pixelData = new Uint8Array(imageData.data.buffer);
+  
+  return Array.from(pixelData); // Convert Uint8Array to a regular array
+}
+
+// Function to handle image uploaded by user
 function handleImageUpload(event) {
     // Create a new instance of FileReader
     var reader = new FileReader();
@@ -73,7 +115,8 @@ function handleImageUpload(event) {
     }
   }
   
-// function that adds event listeners to the canvas element - gets called when body in index.html is loaded
+
+// Function that adds event listeners to the canvas element - gets called when body in index.html is loaded
 function init() {
     // Create a 2d context object on the canvas
     canvas = document.getElementById('canvas');

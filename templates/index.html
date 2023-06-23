@@ -15,6 +15,9 @@
         <!-- Link Javascript scripts -->
         <script src="/static/scripts.js"></script>
 
+        <!-- Include jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
         <title>ExtractMe</title>
     </head>
 
@@ -51,6 +54,10 @@
                 <br>
                 <input type="file" id="image_upload" name="image_upload" accept="image/*">
                 <br><br>
+                <button type="button" onclick="handleExtractText()">Extract Text</button>
+                <p>Extracted text:</p>
+                <br>
+                <p id="extractedText"></p>
             </div>
         </div>
 
