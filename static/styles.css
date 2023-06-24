@@ -2,3 +2,23 @@
     border: 1px solid #000;
     cursor: crosshair;
 }
+
+#header {
+    padding-top: 100px;
+    padding-bottom: 70px;
+}
+
+#about {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+#extract {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+#contact {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
