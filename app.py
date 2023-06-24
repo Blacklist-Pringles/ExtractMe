@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, jsonify
 import cv2
 import easyocr
-import base64
 import numpy as np
-import json
+
 
 app = Flask(__name__)
 
@@ -41,14 +40,21 @@ def extract_text():
     # Extract text from the roi image using EasyOCR
     results = reader.readtext(cv2_image) # results will be a list containing multiple tuples corresponding to the number of words that were extracted. Each tuple has 3 elements - first element is a list of text box coordinates [x.y], 2nd element is the extracted text, and 3rd element is the model confidence level
 
-    # Convert results to a single string containing each extracted word
-    text = ""  
-    for word in results:
-        text += word[1] + " "
+    # Check if text was extracted
+    if len(results) > 0:
+        # Retrieve all extracted text from results and place into single string
+        text = ""
+        for word in results:
+            text += word[1] + " "
+        # Set response as extracted text
+        response = {'extracted_text': text}
+    else:
+        # Set response as feedback message if no text detected
+        text = "No text detected in region"
+        response = {'extracted_text': text}
 
-    # Return extracted text as response to the client
-    response = {'extracted_text': text}
-    return json.dumps(response)
+    # Return response to client
+    return jsonify(response)
 
 
 if __name__ == '__main__':

@@ -33,7 +33,7 @@ function handleMouseUp(event) {
 function drawRectangle() {
   // Clear the canvas to remove any previous rectangle drawings
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // Draw the image that the user uploaded onto the canvas
+  // Draw onto the canvas the image that the user uploaded
   ctx.drawImage(img, 0, 0);
   // Draw the rectangle based on user's mouse movement
   ctx.beginPath();
@@ -45,7 +45,11 @@ function drawRectangle() {
 
 // Function to handle when user clicks Extract Text button
 function handleExtractText() {
-  // Check rectangle is good
+  // Check rectangle selection is okay
+  if (startX >= endX || startY >= endY) {
+    alert("Invalid selection - please draw a rectangle starting from top left moving to bottom right direction");
+    return;
+  }
 
   // Extract the selected region of interest
   var roiData = {
@@ -63,8 +67,9 @@ function handleExtractText() {
     data: JSON.stringify(roiData),
     contentType: 'application/json',
     success: function(response) {
-      // Server will respond with the extracted text within the ROI - display this on the page
-      var extractedText = JSON.parse(response).extracted_text;
+      // Retrieve server response
+      var extractedText = response.extracted_text;
+      // Display extracted text on page
       $("#extractedText").text(extractedText);
     },
     error: function(xhr, status, error) {
