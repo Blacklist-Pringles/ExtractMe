@@ -120,6 +120,19 @@ function handleImageUpload(event) {
     }
   }
   
+// Function to copy extracted text to clipboard
+function copyTextToClipboard() {
+  // get extracted text from textarea element
+  var text = $("#extractedText").val();
+  // Copy text to clipboard
+  navigator.clipboard.writeText(text)
+    .then(() => {
+      alert("Text copied to clipboard");
+    })
+    .catch((error) => {
+      console.error("Failed to copy text to clipboard:", error);
+    });
+}  
 
 // Function that adds event listeners to the canvas element - gets called when body in index.html is loaded
 function init() {
