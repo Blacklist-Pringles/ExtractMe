@@ -77,13 +77,18 @@
             <input type="file" id="image_upload" name="image_upload" accept="image/*">
             <br><br>
             <canvas id="canvas"></canvas>
-            <br><br>
-            <button type="button" class="btn btn-primary" onclick="handleExtractText()">Extract Text</button>
-            <br><br>  
-            Extracted text:
-            <textarea id="extractedText" rows="5" cols="90"></textarea>
             <br>
-            <button type="button" class="btn btn-secondary" onclick="copyTextToClipboard()">Copy text</button>
+            <div id="extract-button">
+              <button type="button" class="btn btn-primary" onclick="handleExtractText()">Extract Text</button>
+              <br><br>  
+            </div>
+            <div id="extract-box">
+              Extracted text:
+              <br>
+              <textarea id="extractedText" rows="5" cols="90"></textarea>
+              <br>
+              <button type="button" class="btn btn-secondary" onclick="copyTextToClipboard()">Copy text</button>
+            </div>
           </div>
         </div>
       </div>

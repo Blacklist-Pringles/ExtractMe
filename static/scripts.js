@@ -12,6 +12,7 @@ function handleMouseDown(event) {
       isDrawing = true;
 }
 
+
 // Function to handle user mouse move event
 function handleMouseMove(event) {
   if (!isDrawing) return;
@@ -20,6 +21,7 @@ function handleMouseMove(event) {
   drawRectangle();
 }
 
+
 // Function to handle user mouse up event
 function handleMouseUp(event) {
   if (!isDrawing) return;
@@ -27,7 +29,10 @@ function handleMouseUp(event) {
   endY = event.offsetY;
   isDrawing = false;
   drawRectangle();
+  // Display Extract Text button
+  document.getElementById('extract-button').style.display = 'block';
 }
+
 
 // Function to draw a rectangle on the image canvas
 function drawRectangle() {
@@ -42,6 +47,7 @@ function drawRectangle() {
   ctx.strokeStyle = 'red';
   ctx.stroke();
 }
+
 
 // Function to handle when user clicks Extract Text button
 function handleExtractText() {
@@ -77,7 +83,11 @@ function handleExtractText() {
       console.error(error);
     }
   });
+
+  // Display Extract Text box
+  document.getElementById('extract-box').style.display = 'block';
 }
+
 
 // Function to retrieve image data within user-selected ROI
 function getImageDataInROI(startX, startY, endX, endY) {
@@ -89,6 +99,7 @@ function getImageDataInROI(startX, startY, endX, endY) {
   
   return Array.from(pixelData); // Convert Uint8Array to a regular array
 }
+
 
 // Function to handle image uploaded by user
 function handleImageUpload(event) {
@@ -120,6 +131,7 @@ function handleImageUpload(event) {
     }
   }
   
+
 // Function to copy extracted text to clipboard
 function copyTextToClipboard() {
   // get extracted text from textarea element
@@ -134,6 +146,7 @@ function copyTextToClipboard() {
     });
 }  
 
+
 // Function that adds event listeners to the canvas element - gets called when body in index.html is loaded
 function init() {
     // Create a 2d context object on the canvas
@@ -145,4 +158,8 @@ function init() {
     canvas.addEventListener('mouseup', handleMouseUp);
     // Add event listener for image upload
     document.getElementById('image_upload').addEventListener('change', handleImageUpload);
+    // Hide Extract Text button
+    document.getElementById('extract-button').style.display = 'none';
+    // Hide Extract Text box
+    document.getElementById('extract-box').style.display = 'none';
 }
