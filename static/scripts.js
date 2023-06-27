@@ -58,7 +58,7 @@ function handleExtractText() {
   }
 
   // Extract the selected region of interest
-  var roiData = {
+  let roiData = {
     startX: startX,
     startY: startY,
     endX: endX,
@@ -92,10 +92,10 @@ function handleExtractText() {
 // Function to retrieve image data within user-selected ROI
 function getImageDataInROI(startX, startY, endX, endY) {
   // Get the pixels within the specified region of interest
-  var imageData = ctx.getImageData(startX, startY, endX - startX, endY - startY);
+  const imageData = ctx.getImageData(startX, startY, endX - startX, endY - startY);
   
   // Convert the pixel data to a Uint8Array
-  var pixelData = new Uint8Array(imageData.data.buffer);
+  const pixelData = new Uint8Array(imageData.data.buffer);
   
   return Array.from(pixelData); // Convert Uint8Array to a regular array
 }
@@ -104,7 +104,7 @@ function getImageDataInROI(startX, startY, endX, endY) {
 // Function to handle image uploaded by user
 function handleImageUpload(event) {
     // Create a new instance of FileReader
-    var reader = new FileReader();
+    const reader = new FileReader();
   
     // Define an event handler for when the FileReader has loaded the file
     reader.onload = function(event) {
@@ -135,7 +135,7 @@ function handleImageUpload(event) {
 // Function to copy extracted text to clipboard
 function copyTextToClipboard() {
   // get extracted text from textarea element
-  var text = $("#extractedText").val();
+  const text = $("#extractedText").val();
   // Copy text to clipboard
   navigator.clipboard.writeText(text)
     .then(() => {
@@ -145,6 +145,23 @@ function copyTextToClipboard() {
       console.error("Failed to copy text to clipboard:", error);
     });
 }  
+
+
+// Function to export extracted text to txt file
+function exportTextFile() {
+  // Get the value of the 'extractedText' textarea
+  const textToExport = document.getElementById('extractedText').value;
+  // Create a Blob object with the text content and specify the MIME type as 'text/plain'
+  const blob = new Blob([textToExport], { type: 'text/plain' });
+  // Create an anchor element to simulate a click and trigger the file download
+  const anchorElement = document.createElement('a');
+  // Set the href attribute of the anchor element to the URL of the Blob object
+  anchorElement.href = URL.createObjectURL(blob);
+  // Set the download attribute of the anchor element to the desired file name
+  anchorElement.download = 'exported_text.txt';
+  // Simulate a click on the anchor element to initiate the file download
+  anchorElement.click();
+}
 
 
 // Function that adds event listeners to the canvas element - gets called when body in index.html is loaded
