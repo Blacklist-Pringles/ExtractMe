@@ -75,12 +75,15 @@ function handleExtractText() {
     success: function(response) {
       // Retrieve server response
       var extractedText = response.extracted_text;
-      // Display extracted text on page
-      $("#extractedText").text(extractedText);
+      // Display server response (extracted text or error) on page
+      $("#extractedTextDisplay").text(extractedText);
     },
     error: function(xhr, status, error) {
-      // Handle the error
+      // Log the error
       console.error(error);
+      // Display error message on page
+      var errorMessage = "An error occurred while extracting text. Please try again.";
+      $("#extractedTextDisplay").text(errorMessage);
     }
   });
 
@@ -104,7 +107,7 @@ function getImageDataInROI(startX, startY, endX, endY) {
 // Function to handle image uploaded by user
 function handleImageUpload(event) {
     // Create a new instance of FileReader
-    const reader = new FileReader();
+    let reader = new FileReader();
   
     // Define an event handler for when the FileReader has loaded the file
     reader.onload = function(event) {
@@ -119,9 +122,23 @@ function handleImageUpload(event) {
         // Draw the image on the canvas at position (0, 0)
         ctx.drawImage(img, 0, 0);
       };
+
+      // Define an event handler for when the Image encounters an error during loading
+      img.onerror = function() {
+      // Handle the error and inform the user
+      console.error("Failed to load the image.");
+      alert('Error uploading image.');
+      };
   
       // Set the source of the Image element to the loaded file data
       img.src = event.target.result;
+    };
+
+    // Define an event handler for when FileReader encounters an error during reading
+    reader.onerror = function() {
+    // Handle the error and inform the user
+    console.error("Failed to read the file.");
+    alert('Error uploading image.');
     };
   
     // Check if a file was selected
@@ -135,7 +152,7 @@ function handleImageUpload(event) {
 // Function to copy extracted text to clipboard
 function copyTextToClipboard() {
   // get extracted text from textarea element
-  const text = $("#extractedText").val();
+  const text = $("#extractedTextDisplay").val();
   // Copy text to clipboard
   navigator.clipboard.writeText(text)
     .then(() => {
@@ -149,8 +166,8 @@ function copyTextToClipboard() {
 
 // Function to export extracted text to txt file
 function exportTextFile() {
-  // Get the value of the 'extractedText' textarea
-  const textToExport = document.getElementById('extractedText').value;
+  // Get the value of the 'extractedTextDisplay' textarea
+  const textToExport = document.getElementById('extractedTextDisplay').value;
   // Create a Blob object with the text content and specify the MIME type as 'text/plain'
   const blob = new Blob([textToExport], { type: 'text/plain' });
   // Create an anchor element to simulate a click and trigger the file download
